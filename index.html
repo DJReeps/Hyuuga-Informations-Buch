@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hyuga-Clan | Das Informationsbuch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0a0912;
+    --panel:#15121e;
+    --panel-2:#1b1727;
+    --line:rgba(234,231,247,0.09);
+    --line-strong:rgba(234,231,247,0.16);
+    --white:#eae7f6;
+    --violet:#8f7fe0;
+    --violet-dim:#6a5bb0;
+    --muted:#a79dc0;
+    --gold:#c7a469;
+    --serif:'Crimson Pro', Georgia, serif;
+    --display:'Cinzel', serif;
+    --mono:'JetBrains Mono', monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--void);
+    color:var(--white);
+    font-family:var(--serif);
+    font-size:18px;
+    line-height:1.75;
+    overflow-x:hidden;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(143,127,224,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 600px at 100% 20%, rgba(199,164,105,0.05), transparent 55%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  a{color:inherit;}
+
+  ::selection{background:var(--violet-dim); color:var(--white);}
+
+  /* ---------- scrollbar ---------- */
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--void);}
+  ::-webkit-scrollbar-thumb{background:var(--panel-2); border-radius:6px;}
+
+  /* ---------- byakugan svg motif ---------- */
+  .eye-mark{display:block;}
+  .eye-mark circle, .eye-mark line, .eye-mark path{
+    stroke:var(--violet);
+  }
+
+  /* ---------- top bar / mobile nav trigger ---------- */
+  .topbar{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:none;
+    align-items:center; justify-content:space-between;
+    padding:16px 20px;
+    background:rgba(10,9,18,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar .brand{
+    font-family:var(--display);
+    font-size:14px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+  .topbar button{
+    background:none; border:1px solid var(--line-strong);
+    color:var(--white); width:38px; height:38px; border-radius:2px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .topbar button span, .topbar button span::before, .topbar button span::after{
+    display:block; width:16px; height:1px; background:var(--white); position:relative;
+  }
+  .topbar button span::before{content:""; position:absolute; top:-5px;}
+  .topbar button span::after{content:""; position:absolute; top:5px;}
+
+  /* ---------- layout ---------- */
+  .frame{
+    position:relative; z-index:1;
+    display:grid;
+    grid-template-columns:280px 1fr;
+    max-width:1400px;
+    margin:0 auto;
+  }
+
+  /* ---------- sidebar ---------- */
+  .sidebar{
+    position:sticky; top:0; height:100vh;
+    border-right:1px solid var(--line);
+    padding:36px 26px;
+    display:flex; flex-direction:column;
+    overflow-y:auto;
+  }
+  .sidebar-brand{
+    display:flex; align-items:center; gap:12px;
+    margin-bottom:8px;
+  }
+  .sidebar-brand .name{
+    font-family:var(--display);
+    font-size:15px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    line-height:1.4;
+  }
+  .sidebar-brand .name small{
+    display:block;
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:.22em;
+    color:var(--muted);
+    text-transform:uppercase;
+    margin-top:3px;
+  }
+  .sidebar-motto{
+    font-size:12.5px;
+    font-style:italic;
+    color:var(--muted);
+    line-height:1.6;
+    padding:18px 0 22px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:18px;
+  }
+  .toc{list-style:none; flex:1;}
+  .toc li{margin-bottom:2px;}
+  .toc a{
+    display:flex; gap:12px; align-items:baseline;
+    text-decoration:none;
+    font-size:13.5px;
+    color:var(--muted);
+    padding:7px 8px;
+    border-radius:2px;
+    transition:color .15s ease, background .15s ease, transform .15s ease;
+  }
+  .toc a .num{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--violet-dim);
+    min-width:18px;
+  }
+  .toc a:hover{color:var(--white); background:rgba(143,127,224,0.06);}
+  .toc a.active{color:var(--white); background:rgba(143,127,224,0.1);}
+  .toc a.active .num{color:var(--gold);}
+
+  .sidebar-foot{
+    font-family:var(--mono);
+    font-size:9.5px;
+    letter-spacing:.08em;
+    color:var(--violet-dim);
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    text-transform:uppercase;
+  }
+
+  /* ---------- main ---------- */
+  main{padding:0 0 120px;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    min-height:92vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:80px 40px;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .hero .veins{
+    position:absolute; top:50%; left:50%;
+    width:1100px; height:1100px;
+    transform:translate(-50%,-50%);
+    opacity:.5;
+    animation:breathe 9s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{opacity:.35; transform:translate(-50%,-50%) scale(1);}
+    50%{opacity:.55; transform:translate(-50%,-50%) scale(1.015);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero .veins{animation:none;}
+  }
+  .hero-eyebrow{
+    position:relative; z-index:2;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.35em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:26px;
+  }
+  .hero h1{
+    position:relative; z-index:2;
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(38px, 6vw, 74px);
+    letter-spacing:.03em;
+    line-height:1.15;
+    max-width:900px;
+  }
+  .hero h1 em{
+    font-style:normal; color:var(--violet);
+  }
+  .hero .sub{
+    position:relative; z-index:2;
+    max-width:560px;
+    margin-top:24px;
+    color:var(--muted);
+    font-size:16px;
+    font-style:italic;
+    line-height:1.7;
+  }
+  .hero .motto{
+    position:relative; z-index:2;
+    margin-top:44px;
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:19px;
+    color:var(--white);
+    max-width:620px;
+  }
+  .hero .motto span{
+    display:block; margin-top:10px;
+    font-family:var(--mono);
+    font-style:normal;
+    font-size:10.5px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--violet-dim);
+  }
+
+  /* ---------- sections ---------- */
+  .chapter{
+    padding:110px 64px 20px;
+    max-width:920px;
+    border-bottom:1px solid var(--line);
+  }
+  .chapter:last-of-type{border-bottom:none;}
+  .chapter-head{
+    display:flex; align-items:flex-start; gap:22px;
+    margin-bottom:36px;
+  }
+  .chapter-num{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--gold);
+    letter-spacing:.1em;
+    padding-top:14px;
+    white-space:nowrap;
+  }
+  .chapter h2{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(26px,3.4vw,38px);
+    letter-spacing:.01em;
+    line-height:1.25;
+  }
+  .kicker{
+    display:block;
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--violet);
+    margin-bottom:10px;
+  }
+  .chapter p{
+    color:#dcd8ee;
+    margin-bottom:18px;
+    max-width:72ch;
+  }
+  .chapter p.lead{
+    font-size:19px;
+    color:var(--white);
+  }
+  .chapter ul.plain{
+    list-style:none;
+    margin:20px 0 26px;
+    display:grid;
+    gap:10px;
+  }
+  .chapter ul.plain li{
+    position:relative;
+    padding-left:24px;
+    color:#dcd8ee;
+    max-width:68ch;
+  }
+  .chapter ul.plain li::before{
+    content:"";
+    position:absolute; left:0; top:11px;
+    width:7px; height:1px;
+    background:var(--violet);
+  }
+  blockquote{
+    border-left:2px solid var(--violet-dim);
+    padding:6px 0 6px 26px;
+    margin:26px 0;
+    font-style:italic;
+    color:var(--muted);
+    max-width:64ch;
+  }
+
+  /* divider ornament between subsections */
+  .vein-divider{
+    display:flex; align-items:center; gap:14px;
+    margin:44px 0 34px;
+    color:var(--violet-dim);
+  }
+  .vein-divider .line{flex:1; height:1px; background:var(--line-strong);}
+  .vein-divider svg{flex-shrink:0;}
+
+  /* subsection card grid (Aufbau, Anwesen) */
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+    gap:18px;
+    margin:8px 0 30px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:22px 24px;
+    position:relative;
+  }
+  .card::before{
+    content:"";
+    position:absolute; top:0; left:0; width:26px; height:2px;
+    background:var(--gold);
+  }
+  .card h3{
+    font-family:var(--display);
+    font-size:15.5px;
+    letter-spacing:.04em;
+    margin-bottom:10px;
+    font-weight:600;
+  }
+  .card p{font-size:15px; color:var(--muted); margin-bottom:10px;}
+  .card ul{list-style:none; display:grid; gap:6px;}
+  .card ul li{
+    font-size:14px; color:#cfc9e4; padding-left:16px; position:relative;
+  }
+  .card ul li::before{
+    content:"-"; position:absolute; left:0; color:var(--violet-dim);
+  }
+
+  /* values grid */
+  .value-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(150px,1fr));
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    margin:26px 0;
+  }
+  .value-grid span{
+    background:var(--panel);
+    padding:16px 14px;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.05em;
+    color:var(--white);
+    text-align:center;
+  }
+
+  /* technique scrolls */
+  .technique-list{
+    display:grid; gap:2px;
+    margin:26px 0 30px;
+    border:1px solid var(--line);
+  }
+  .technique-list div{
+    background:var(--panel);
+    padding:16px 22px;
+    font-family:var(--serif);
+    font-size:16px;
+    color:var(--white);
+    display:flex; align-items:center; gap:16px;
+  }
+  .technique-list div::before{
+    content:"";
+    width:5px; height:5px; border-radius:50%;
+    background:var(--violet);
+    flex-shrink:0;
+  }
+
+  /* honor code paragraphs */
+  .code-list{display:grid; gap:22px; margin:30px 0;}
+  .code-item{
+    display:grid; grid-template-columns:64px 1fr; gap:18px;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--line);
+  }
+  .code-item:last-child{border-bottom:none;}
+  .code-item .p-num{
+    font-family:var(--display);
+    font-size:26px;
+    color:var(--gold);
+    line-height:1;
+  }
+  .code-item h4{
+    font-family:var(--display);
+    font-size:15.5px;
+    margin-bottom:8px;
+    letter-spacing:.02em;
+  }
+  .code-item p{font-size:15px; color:#cfc9e4; margin:0;}
+
+  /* consequences */
+  .consequence-list{
+    list-style:none; counter-reset:cons;
+    display:grid; gap:10px; margin:20px 0 30px;
+  }
+  .consequence-list li{
+    counter-increment:cons;
+    display:flex; gap:14px; align-items:baseline;
+    font-size:15px; color:#dcd8ee;
+    padding:12px 16px;
+    background:var(--panel);
+    border-left:2px solid var(--violet-dim);
+  }
+  .consequence-list li::before{
+    content:counter(cons, decimal-leading-zero);
+    font-family:var(--mono);
+    color:var(--gold);
+    font-size:12px;
+  }
+
+  /* hierarchy chart (chapter 12) */
+  .hierarchy{
+    display:grid; gap:10px; margin:30px 0 20px;
+  }
+  .rank-row{
+    display:flex; justify-content:center;
+  }
+  .rank-box{
+    background:var(--panel);
+    border:1px solid var(--line-strong);
+    padding:16px 26px;
+    text-align:center;
+    max-width:420px;
+    position:relative;
+  }
+  .rank-box .title{
+    font-family:var(--display);
+    font-size:15px;
+    letter-spacing:.03em;
+    margin-bottom:4px;
+  }
+  .rank-box .desc{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--muted);
+    letter-spacing:.03em;
+  }
+  .rank-connector{
+    display:flex; justify-content:center;
+  }
+  .rank-connector svg{display:block;}
+  .rank-row.wide .rank-box{max-width:none; flex:1;}
+  .rank-row.wide{gap:14px; width:100%;}
+  .rank-row.two{gap:14px;}
+  .rank-row.two .rank-box{max-width:260px; flex:1;}
+
+  /* strengths / weaknesses */
+  .duo{
+    display:grid; grid-template-columns:1fr 1fr; gap:26px;
+    margin:26px 0 10px;
+  }
+  .duo .col{
+    padding:24px;
+    border:1px solid var(--line);
+    background:var(--panel);
+  }
+  .duo .col.strength{border-top:2px solid var(--violet);}
+  .duo .col.weakness{border-top:2px solid var(--gold);}
+  .duo .col h3{
+    font-family:var(--display);
+    font-size:14px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin-bottom:16px;
+    color:var(--muted);
+  }
+  .duo .col h4{
+    font-family:var(--serif);
+    font-size:16px;
+    font-weight:600;
+    margin:14px 0 4px;
+    color:var(--white);
+  }
+  .duo .col p{font-size:14.5px; color:#cfc9e4; margin-bottom:0;}
+
+  /* members */
+  .member{
+    display:grid; grid-template-columns:150px 1fr; gap:26px;
+    padding:26px 0;
+    border-bottom:1px solid var(--line);
+    align-items:start;
+  }
+  .member:last-child{border-bottom:none;}
+  .member .glyph{
+    font-family:var(--display);
+    font-size:34px;
+    color:var(--violet-dim);
+    line-height:1;
+  }
+  .member h3{
+    font-family:var(--display);
+    font-size:18px;
+    margin-bottom:8px;
+    letter-spacing:.02em;
+  }
+  .member p{font-size:15px; color:#dcd8ee; margin:0;}
+
+  /* crest */
+  .crest-wrap{
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center;
+    padding:20px 0 10px;
+  }
+  .crest-values{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+    margin:26px 0 8px;
+  }
+  .crest-values span{
+    font-family:var(--mono);
+    font-size:11px; letter-spacing:.08em;
+    color:var(--violet);
+    border:1px solid var(--line-strong);
+    padding:8px 16px;
+  }
+
+  /* ---------- imagery ---------- */
+  figure.chapter-figure{
+    margin:32px 0;
+    border:1px solid var(--line);
+    background:var(--panel);
+    padding:10px;
+    border-radius:4px;
+    text-align:center;
+  }
+  figure.chapter-figure img{
+    display:block;
+    margin:0 auto;
+    max-width:100%;
+    height:auto;
+    width:auto;
+    max-height:460px;
+    object-fit:contain;
+    border-radius:2px;
+    background:var(--void);
+  }
+  figure.chapter-figure figcaption{
+    margin-top:12px; padding:2px 6px 6px;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--violet-dim);
+    text-align:center;
+  }
+  .figure-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:18px;
+    margin:32px 0;
+    align-items:start;
+  }
+  .figure-grid figure.chapter-figure{margin:0;}
+  .figure-grid img{max-height:320px;}
+  .figure-wide img{max-height:380px;}
+  .figure-portrait img{max-height:560px;}
+
+  /* closing */
+  .closing{
+    padding:110px 64px 140px;
+    max-width:920px;
+    text-align:center;
+    margin:0 auto;
+  }
+  .closing .final-quote{
+    font-family:var(--display);
+    font-size:clamp(20px,2.6vw,28px);
+    line-height:1.5;
+    max-width:760px;
+    margin:40px auto 0;
+    color:var(--white);
+  }
+  .closing .final-quote::before,
+  .closing .final-quote::after{content:"";}
+
+  /* mobile overlay nav */
+  .mobile-toc{
+    position:fixed; inset:0; z-index:60;
+    background:rgba(10,9,18,0.98);
+    display:none;
+    padding:90px 30px 30px;
+    overflow-y:auto;
+  }
+  .mobile-toc.open{display:block;}
+  .mobile-toc ul{list-style:none; display:grid; gap:4px;}
+  .mobile-toc a{
+    display:flex; gap:14px;
+    text-decoration:none; color:var(--muted);
+    font-size:15px; padding:12px 6px;
+    border-bottom:1px solid var(--line);
+  }
+  .mobile-toc a .num{font-family:var(--mono); color:var(--gold); font-size:12px;}
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 980px){
+    .frame{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+    .topbar{display:flex;}
+    main{padding-top:70px;}
+    .chapter{padding:70px 26px 10px;}
+    .hero{padding:120px 24px 70px; min-height:auto;}
+    .duo{grid-template-columns:1fr;}
+    .member{grid-template-columns:60px 1fr;}
+    .closing{padding:70px 26px 100px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">Hyuga-Clan</div>
+  <button id="navToggle" aria-label="Inhaltsverzeichnis öffnen"><span></span></button>
+</div>
+
+<nav class="mobile-toc" id="mobileToc">
+  <ul id="mobileTocList"></ul>
+</nav>
+
+<div class="frame">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <svg class="eye-mark" width="30" height="30" viewBox="0 0 60 60" fill="none">
+        <circle cx="30" cy="30" r="27" stroke-width="1"/>
+        <circle cx="30" cy="30" r="6" fill="var(--violet)" stroke="none"/>
+        <line x1="30" y1="6" x2="30" y2="16" stroke-width="1"/>
+        <line x1="30" y1="44" x2="30" y2="54" stroke-width="1"/>
+        <line x1="6" y1="30" x2="16" y2="30" stroke-width="1"/>
+        <line x1="44" y1="30" x2="54" y2="30" stroke-width="1"/>
+        <line x1="12" y1="12" x2="19" y2="19" stroke-width="1"/>
+        <line x1="41" y1="41" x2="48" y2="48" stroke-width="1"/>
+        <line x1="48" y1="12" x2="41" y2="19" stroke-width="1"/>
+        <line x1="19" y1="41" x2="12" y2="48" stroke-width="1"/>
+      </svg>
+      <div class="name">Hyuga<small>Informationsbuch</small></div>
+    </div>
+    <p class="sidebar-motto">"Die Augen mögen den Weg erkennen, doch erst Ehre und Disziplin entscheiden, wohin er führt."</p>
+    <ul class="toc" id="tocList"></ul>
+    <div class="sidebar-foot">Konohagakure - Byakugan</div>
+  </aside>
+
+  <main>
+
+    <section class="hero" id="top">
+      <svg class="veins" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="400" cy="400" r="360" stroke-width="1" opacity="0.25"/>
+        <circle cx="400" cy="400" r="270" stroke-width="1" opacity="0.35"/>
+        <circle cx="400" cy="400" r="180" stroke-width="1" opacity="0.5"/>
+        <circle cx="400" cy="400" r="40" fill="var(--violet)" opacity="0.8" stroke="none"/>
+        <g opacity="0.5">
+          <line x1="400" y1="40" x2="400" y2="220" stroke-width="1"/>
+          <line x1="400" y1="580" x2="400" y2="760" stroke-width="1"/>
+          <line x1="40" y1="400" x2="220" y2="400" stroke-width="1"/>
+          <line x1="580" y1="400" x2="760" y2="400" stroke-width="1"/>
+          <line x1="145" y1="145" x2="270" y2="270" stroke-width="1"/>
+          <line x1="655" y1="655" x2="530" y2="530" stroke-width="1"/>
+          <line x1="655" y1="145" x2="530" y2="270" stroke-width="1"/>
+          <line x1="145" y1="655" x2="270" y2="530" stroke-width="1"/>
+        </g>
+      </svg>
+      <div class="hero-eyebrow">Das Erbe der Hyuga</div>
+      <h1>Das Informationsbuch<br>des <em>Hyuga</em>-Clans</h1>
+      <p class="sub">Geschichte, Philosophie, Byakugan und Juken, Hierarchie und Ehrenkodex - gesammelt für jedes Mitglied des Clans.</p>
+      <p class="motto">"Ein Hyuga wird nicht durch seine Augen definiert, sondern durch die Ehre, mit der er seinen Weg beschreitet."<span>Schlusswort des Informationsbuchs</span></p>
+    </section>
+
+    <!-- 01 EINLEITUNG -->
+    <section class="chapter" id="c01" data-title="Einleitung">
+      <div class="chapter-head">
+        <div class="chapter-num">01</div>
+        <h2>Einleitung</h2>
+      </div>
+      <p class="lead">Der Hyuga-Clan zählt zu den ältesten, angesehensten und traditionsreichsten Clans Konohagakures. Seit Generationen bewahren seine Mitglieder das Byakugan, eines der mächtigsten Dojutsu der Shinobi-Welt, sowie den einzigartigen Kampfstil des Juken.</p>
+      <p>Durch ihre außergewöhnliche Chakra-Kontrolle, ihre Disziplin und ihre jahrhundertealten Traditionen geniessen die Hyuga hohes Ansehen. Der Clan versteht sich nicht nur als Familie, sondern als Gemeinschaft, deren Stärke auf Zusammenhalt, Loyalität und gegenseitigem Vertrauen basiert. Jeder Hyuga trägt Verantwortung - gegenüber seiner Familie, seinem Clan und dem Dorf.</p>
+      <p>Dieses Handbuch dokumentiert Geschichte, Werte, Regeln, Hierarchie und Traditionen des Clans und dient zugleich als Leitfaden für jedes Mitglied.</p>
+    </section>
+
+    <!-- 02 GESCHICHTE -->
+    <section class="chapter" id="c02" data-title="Die Geschichte des Hyuga-Clans">
+      <div class="chapter-head">
+        <div class="chapter-num">02</div>
+        <h2>Die Geschichte des Hyuga-Clans</h2>
+      </div>
+      <p>Die Wurzeln des Hyuga-Clans reichen bis in die frühesten Zeiten der Shinobi-Welt zurück. Als direkte Nachfahren Hamura Otsutsukis erbten die Mitglieder das Byakugan - ein Dojutsu, das ihnen eine außergewöhnliche Wahrnehmung und Kontrolle über Chakra verleiht.</p>
+      <p>Mit der Gründung Konohagakures gehörte der Hyuga-Clan zu den einflussreichsten Familien des Dorfes. Über viele Generationen hinweg beschützten seine Mitglieder sowohl das Dorf als auch die Geheimnisse ihres Clans. Das Byakugan wurde zu einem Symbol für Präzision, Disziplin und Verantwortungsbewusstsein.</p>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/protectors-of-konoha.png" alt="Protectors of Konoha - Torii bei Vollmond">
+        <figcaption>Protectors of Konoha - 木ノ葉の守護者</figcaption>
+      </figure>
+
+      <p>Über Jahrhunderte entwickelte sich eine klare Familienstruktur mit einer Hauptfamilie und einer Zweigfamilie. Diese Ordnung sollte das Erbe des Clans schützen und seine Techniken bewahren. Gleichzeitig führte sie jedoch zu Spannungen innerhalb der Familie.</p>
+      <p>Nach dem Vierten Shinobi-Weltkrieg begann ein Wandel. Alte Traditionen wurden überdacht und viele Strukturen reformiert, ohne dabei die Identität des Clans aufzugeben. Bis heute verbinden die Hyuga ihre historischen Werte mit dem Anspruch, sich den Herausforderungen einer neuen Zeit anzupassen.</p>
+    </section>
+
+    <!-- 03 ENTSTEHUNG -->
+    <section class="chapter" id="c03" data-title="Die Entstehung des Clans">
+      <div class="chapter-head">
+        <div class="chapter-num">03</div>
+        <h2>Die Entstehung des Clans</h2>
+      </div>
+      <p>Der Ursprung des Hyuga-Clans liegt in der Abstammung von Hamura Otsutsuki. Seine Nachkommen führten das Byakugan über Generationen hinweg weiter und entwickelten daraus einen einzigartigen Kampfstil, der ausschliesslich innerhalb des Clans gelehrt wurde.</p>
+      <p>Mit der Zeit entstand eine feste Gemeinschaft, deren Mitglieder ihre Fähigkeiten nicht allein zur eigenen Stärke nutzten, sondern zum Schutz ihrer Familie und ihrer Verbündeten. Wissen wurde nur innerhalb des Clans weitergegeben, wodurch zahlreiche geheime Techniken bis heute erhalten geblieben sind.</p>
+      <p>Die Kombination aus außergewöhnlicher Wahrnehmung, präziser Chakra-Kontrolle und jahrhundertelangem Training machte den Hyuga-Clan zu einem der mächtigsten Taijutsu-Clans der Shinobi-Welt.</p>
+    </section>
+
+    <!-- 04 PHILOSOPHIE -->
+    <section class="chapter" id="c04" data-title="Die Philosophie des Clans">
+      <div class="chapter-head">
+        <div class="chapter-num">04</div>
+        <h2>Die Philosophie des Clans</h2>
+      </div>
+      <p class="lead">Die Stärke eines Hyuga wird nicht allein an seinen Fähigkeiten gemessen. Wahre Grösse zeigt sich im Charakter.</p>
+      <p>Jedes Mitglied wird bereits in jungen Jahren gelehrt, dass Disziplin, Selbstbeherrschung und Verantwortung wichtiger sind als Ruhm oder Macht. Die Grundgedanken des Clans lauten:</p>
+      <ul class="plain">
+        <li>Stärke dient dem Schutz und niemals der Unterdrückung.</li>
+        <li>Disziplin führt zur Vollkommenheit.</li>
+        <li>Kontrolle ist wertvoller als Aggression.</li>
+        <li>Wissen überdauert körperliche Stärke.</li>
+        <li>Die Familie steht über persönlichen Interessen.</li>
+        <li>Ehre ist das höchste Gut eines Hyuga.</li>
+      </ul>
+      <p>Diese Werte begleiten jedes Mitglied ein Leben lang und bilden die Grundlage aller Entscheidungen. Sie zeigen sich im Alltag jedes Mitglieds als gelebte Tugenden:</p>
+      <div class="value-grid">
+        <span>Loyalität</span><span>Disziplin</span><span>Respekt</span><span>Selbstbeherrschung</span>
+        <span>Verantwortung</span><span>Präzision</span><span>Geduld</span><span>Hilfsbereitschaft</span>
+        <span>Ehre</span><span>Zusammenhalt</span>
+      </div>
+    </section>
+
+    <!-- 05 BYAKUGAN -->
+    <section class="chapter" id="c05" data-title="Das Byakugan">
+      <div class="chapter-head">
+        <div class="chapter-num">05</div>
+        <h2>Das Byakugan</h2>
+      </div>
+      <p class="lead">Das Byakugan ist das Kekkei Genkai des Hyuga-Clans und zählt zu den drei grossen Dojutsu der Shinobi-Welt.</p>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/byakugan-augen.png" alt="Die Augen des Byakugan">
+        <figcaption>Byakugan - 白眼</figcaption>
+      </figure>
+
+      <p>Durch das Aktivieren des Byakugan erweitern sich die Wahrnehmungsfähigkeiten des Anwenders erheblich.</p>
+      <div class="vein-divider">
+        <div class="line"></div>
+        <svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="7" stroke="var(--violet)" stroke-width="1" fill="none"/><circle cx="9" cy="9" r="2" fill="var(--violet)"/></svg>
+        <div class="line"></div>
+      </div>
+      <ul class="plain">
+        <li>Nahezu vollständiges 360-Grad-Sichtfeld</li>
+        <li>Erkennung des gesamten Chakrasystems</li>
+        <li>Sicht auf sämtliche Tenketsu</li>
+        <li>Wahrnehmung von Chakra selbst durch Hindernisse</li>
+        <li>Beobachtung über grosse Entfernungen</li>
+        <li>Analyse kleinster Bewegungen</li>
+      </ul>
+
+      <div class="figure-grid">
+        <figure class="chapter-figure">
+          <img src="images/tenketsu-points.png" alt="Tenketsu Punkte am Koerper">
+          <figcaption>Tenketsu Points - 経穴</figcaption>
+        </figure>
+        <figure class="chapter-figure">
+          <img src="images/byakugan-activated.png" alt="Aktiviertes Byakugan Auge">
+          <figcaption>Byakugan Activated - 白眼発動</figcaption>
+        </figure>
+      </div>
+
+      <p>Diese Fähigkeiten machen den Hyuga-Clan zu hervorragenden Spähern, Verteidigern und Nahkämpfern.</p>
+    </section>
+
+    <!-- 06 JUKEN -->
+    <section class="chapter" id="c06" data-title="Der Sanfte Fauststil (Juken)">
+      <div class="chapter-head">
+        <div class="chapter-num">06</div>
+        <h2>Der Sanfte Fauststil (Juken)</h2>
+      </div>
+      <p class="lead">Der Sanfte Fauststil ist die traditionelle Kampfkunst des Hyuga-Clans.</p>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/gentle-fist.png" alt="Gentle Fist Yin Yang Symbol">
+        <figcaption>Gentle Fist - 柔拳</figcaption>
+      </figure>
+
+      <p>Im Gegensatz zu gewöhnlichem Taijutsu greift der Juken nicht die Muskeln oder Knochen eines Gegners an, sondern dessen Chakrasystem. Durch präzise Chakra-Stösse werden die Tenketsu getroffen und der Chakrafluss des Gegners gestört.</p>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/juken-sanfte-faust.png" alt="Juken Bewegungsablauf">
+        <figcaption>Jūken - Sanfte Faust - 柔拳</figcaption>
+      </figure>
+
+      <p>Ein geübter Anwender kann:</p>
+      <ul class="plain">
+        <li>Chakra blockieren</li>
+        <li>Innere Organe verletzen</li>
+        <li>Techniken unterbrechen</li>
+        <li>Gegner kampfunfähig machen</li>
+        <li>Kämpfe mit minimalem Kraftaufwand entscheiden</li>
+      </ul>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/tenketsu-koerper.png" alt="Tenketsu Punkte am Koerper des Gegners">
+        <figcaption>Tenketsu - 経穴</figcaption>
+      </figure>
+
+      <p>Die Effektivität des Juken beruht auf Präzision und perfekter Chakra-Kontrolle.</p>
+    </section>
+
+    <!-- 07 ACHT TRIGRAMME -->
+    <section class="chapter" id="c07" data-title="Die Acht Trigramme">
+      <div class="chapter-head">
+        <div class="chapter-num">07</div>
+        <h2>Die Acht Trigramme</h2>
+      </div>
+      <p class="lead">Die berühmtesten Techniken des Hyuga-Clans basieren auf der Kampfkunst der Acht Trigramme.</p>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/acht-trigramme.png" alt="Acht Trigramme Bagua Symbol">
+        <figcaption>Acht Trigramme - 八卦</figcaption>
+      </figure>
+
+      <p>Sie verbinden das Byakugan mit höchster Präzision und einem kontrollierten Chakrafluss. Zu den bekanntesten Techniken gehören:</p>
+      <div class="technique-list">
+        <div>Acht Trigramme - 64 Handflächen</div>
+        <div>Acht Trigramme - 128 Handflächen</div>
+        <div>Acht Trigramme - Himmlische Rotation</div>
+        <div>Acht Trigramme - Leerer Handflächenschlag</div>
+        <div>Acht Trigramme - Vakuumpalme</div>
+        <div>Schutzwall der Acht Trigramme - 64 Handflächen</div>
+      </div>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/64-palm-techniken.png" alt="64 Palm Techniken Darstellung">
+        <figcaption>64 Palm Techniken - 六十四掌</figcaption>
+      </figure>
+
+      <p>Diese Techniken gelten als Höhepunkt der Kampfkünste des Hyuga-Clans und können nur durch jahrelanges Training gemeistert werden.</p>
+    </section>
+
+    <!-- 08 AUFBAU -->
+    <section class="chapter" id="c08" data-title="Der Aufbau des Clans">
+      <div class="chapter-head">
+        <div class="chapter-num">08</div>
+        <h2>Der Aufbau des Clans</h2>
+      </div>
+      <p class="lead">Der Hyuga-Clan besitzt eine klar geregelte Organisationsstruktur, die auf Verantwortung, Erfahrung und gegenseitigem Respekt basiert.</p>
+      <p>Jede Position innerhalb des Clans bringt eigene Aufgaben und Pflichten mit sich und dient dem gemeinsamen Ziel, den Fortbestand des Clans zu sichern sowie seine Werte und Traditionen zu bewahren. Die Hierarchie soll dabei nicht nur Ordnung schaffen, sondern auch jedem Mitglied eine klare Orientierung und Entwicklungsmöglichkeit bieten.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <h3>Clanleiter</h3>
+          <p>Die höchste Autorität des Hyuga-Clans, verantwortlich für alle Entscheidungen und Vertretung nach aussen.</p>
+          <ul>
+            <li>Führung und Organisation des Clans</li>
+            <li>Wahrung der Traditionen und Clanwerte</li>
+            <li>Vertretung des Clans nach aussen</li>
+            <li>Ernennung und Beförderung von Mitgliedern</li>
+            <li>Entscheidung über Disziplinarmassnahmen</li>
+            <li>Verwaltung geheimer Techniken und Clanangelegenheiten</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Stellvertreter</h3>
+          <p>Unterstützt die Clanleitung und übernimmt die Leitung bei deren Abwesenheit.</p>
+          <ul>
+            <li>Unterstützung der Clanleitung</li>
+            <li>Organisation interner Veranstaltungen</li>
+            <li>Vermittlung zwischen Führung und Mitgliedern</li>
+            <li>Kontrolle der Einhaltung des Ehrenkodex</li>
+            <li>Unterstützung bei Prüfungen und Beförderungen</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Älteste</h3>
+          <p>Die erfahrensten Mitglieder, beratend an der Seite der Clanführung.</p>
+          <ul>
+            <li>Beratung der Clanleitung</li>
+            <li>Ausbildung jüngerer Mitglieder</li>
+            <li>Vermittlung der Clanphilosophie</li>
+            <li>Unterstützung bei Prüfungen</li>
+            <li>Bewahrung historischer Überlieferungen</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Vollwertige Mitglieder</h3>
+          <p>Das Fundament des Clans - nehmen an Missionen, Training und Versammlungen teil.</p>
+          <ul>
+            <li>Einhaltung des Ehrenkodex</li>
+            <li>Regelmässige Teilnahme am Clanleben</li>
+            <li>Würdige Vertretung innerhalb und ausserhalb Konohagakures</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Schüler</h3>
+          <p>Befinden sich in der Ausbildung, begleitet von erfahrenen Clanmitgliedern.</p>
+          <ul>
+            <li>Chakra-Kontrolle</li>
+            <li>Grundlagen des Byakugan</li>
+            <li>Erlernen des Juken</li>
+            <li>Verhalten innerhalb des Clans</li>
+            <li>Disziplin und Respekt</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 ANWESEN -->
+    <section class="chapter" id="c09" data-title="Das Hyuga-Anwesen">
+      <div class="chapter-head">
+        <div class="chapter-num">09</div>
+        <h2>Das Hyuga-Anwesen</h2>
+      </div>
+      <p class="lead">Das Anwesen des Hyuga-Clans befindet sich innerhalb Konohagakures und zählt zu den grössten privaten Anlagen des Dorfes.</p>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/haupthaus.png" alt="Das Hyuuga Haupthaus bei Vollmond">
+        <figcaption>Das Hyuuga Haupthaus - 日向本家</figcaption>
+      </figure>
+
+      <p>Hohe Mauern, bewachte Tore und weitläufige Innenhöfe schützen den Besitz des Clans und bieten seinen Mitgliedern einen Ort der Sicherheit und des Zusammenhalts. Das Anwesen ist weit mehr als ein Wohnort - es bildet das Zentrum des gesamten Clanlebens.</p>
+
+      <div class="card-grid">
+        <div class="card"><h3>Das Haupthaus</h3><p>Sitz der Clanleitung. Hier werden wichtige Entscheidungen getroffen, Versammlungen abgehalten und offizielle Gäste empfangen - Symbol der Einheit und Führung des Clans.</p></div>
+        <div class="card"><h3>Wohnhäuser</h3><p>Mehrere Wohnhäuser, in denen die verschiedenen Familien des Clans leben und zur Gemeinschaft beitragen.</p></div>
+        <div class="card"><h3>Das Dojo</h3><p>Herzstück der Ausbildung. Hier werden sämtliche Techniken des Juken gelehrt und perfektioniert - Anfänger wie erfahrene Mitglieder trainieren gemeinsam.</p></div>
+        <div class="card"><h3>Trainingsgelände</h3><p>Platz für Sparringskämpfe, Chakra-Kontrolle, Teamtraining, Prüfungen und individuelles Training sowie Clanveranstaltungen.</p></div>
+        <div class="card"><h3>Meditationsgarten</h3><p>Dient der inneren Ruhe und Konzentration - Vorbereitung auf Prüfungen und Missionen sowie Verbesserung der Chakra-Kontrolle.</p></div>
+        <div class="card"><h3>Das Archiv</h3><p>Aufbewahrung bedeutender Dokumente: Stammbäume, historische Aufzeichnungen, Schriftrollen, geheime Techniken, Clanchroniken. Zugang nur für autorisierte Mitglieder.</p></div>
+        <div class="card"><h3>Versammlungshalle</h3><p>Mittelpunkt aller offiziellen Zusammenkünfte: Clanversammlungen, Ernennungen, Prüfungen, Zeremonien und Feierlichkeiten.</p></div>
+      </div>
+
+      <div class="figure-grid">
+        <figure class="chapter-figure">
+          <img src="images/hyuuga-dojo.png" alt="Das Hyuuga Dojo von oben">
+          <figcaption>Hyuuga Dojo - 白向道場</figcaption>
+        </figure>
+        <figure class="chapter-figure">
+          <img src="images/trainingsgelaende.png" alt="Hyuuga Trainingsgelaende mit Torii">
+          <figcaption>Hyuuga Trainingsgelände - 日向道場</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 10 EHRENKODEX -->
+    <section class="chapter" id="c10" data-title="Der Ehrenkodex">
+      <div class="chapter-head">
+        <div class="chapter-num">10</div>
+        <h2>Der Ehrenkodex</h2>
+      </div>
+      <p class="lead">Der Ehrenkodex bildet die Grundlage des Zusammenlebens innerhalb des Hyuga-Clans.</p>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/hyuuga-code.png" alt="Hyuuga Code Kalligraphie">
+        <figcaption>Hyuuga Code - 日向の掟</figcaption>
+      </figure>
+
+      <p>Er dient der Wahrung von Disziplin, Ordnung und dem guten Ruf des Clans. Jedes Mitglied ist verpflichtet, diese Grundsätze zu kennen und nach ihnen zu handeln.</p>
+
+      <div class="code-list">
+        <div class="code-item"><div class="p-num">§1</div><div><h4>Ehre des Clans</h4><p>Das Wohl und das Ansehen des Hyuga-Clans stehen über den persönlichen Interessen des Einzelnen. Jeder Hyuga trägt Verantwortung dafür, den Ruf des Clans durch sein Verhalten zu schützen und zu stärken.</p></div></div>
+        <div class="code-item"><div class="p-num">§2</div><div><h4>Loyalität</h4><p>Loyalität gegenüber dem Clan, seiner Führung und seinen Mitgliedern ist unverzichtbar. Entscheidungen der Clanleitung werden respektiert und gewissenhaft umgesetzt.</p></div></div>
+        <div class="code-item"><div class="p-num">§3</div><div><h4>Disziplin und Selbstbeherrschung</h4><p>Ein Hyuga handelt stets mit Bedacht und Kontrolle. Unüberlegte Entscheidungen oder impulsives Verhalten widersprechen den Grundwerten des Clans.</p></div></div>
+        <div class="code-item"><div class="p-num">§4</div><div><h4>Achtung der Hierarchie</h4><p>Die Rangordnung innerhalb des Clans dient der Ordnung und Stabilität. Weisungen ranghöherer Mitglieder sind zu befolgen, sofern sie den Werten und Regeln des Clans entsprechen.</p></div></div>
+        <div class="code-item"><div class="p-num">§5</div><div><h4>Verantwortung im Umgang mit den Clantechniken</h4><p>Das Byakugan und der Sanfte Fauststil sind das grösste Erbe des Hyuga-Clans. Ihr Einsatz erfolgt ausschliesslich verantwortungsvoll und niemals zum persönlichen Machtgewinn oder Missbrauch.</p></div></div>
+        <div class="code-item"><div class="p-num">§6</div><div><h4>Pflichtbewusstsein</h4><p>Jedes Mitglied trägt Verantwortung für den Fortbestand des Clans. Persönliche Interessen treten hinter den Pflichten gegenüber der Gemeinschaft zurück.</p></div></div>
+        <div class="code-item"><div class="p-num">§7</div><div><h4>Geschlossenes Auftreten</h4><p>Interne Angelegenheiten werden innerhalb des Clans geklärt. Nach aussen tritt der Hyuga-Clan stets geschlossen, respektvoll und geeint auf.</p></div></div>
+      </div>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/tradition-honor.png" alt="Zwei Katana - Tradition und Ehre">
+        <figcaption>Tradition &amp; Honor - 伝統と名誉</figcaption>
+      </figure>
+
+      <div class="vein-divider">
+        <div class="line"></div>
+        <span style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--violet-dim);text-transform:uppercase;">Konsequenzen bei Verstössen</span>
+        <div class="line"></div>
+      </div>
+      <p>Verstösse gegen den Ehrenkodex werden durch die Clanleitung geprüft und entsprechend ihrer Schwere bewertet. Sämtliche Massnahmen dienen dem Erhalt der Ordnung und nicht der willkürlichen Bestrafung einzelner Mitglieder.</p>
+      <ol class="consequence-list">
+        <li>Mündliche Verwarnung</li>
+        <li>Schriftliche Verwarnung</li>
+        <li>Entzug von Privilegien</li>
+        <li>Zeitweilige Suspendierung von Clanaufgaben</li>
+        <li>Degradierung innerhalb der Clanstruktur</li>
+        <li>Zuordnung zur Zweigfamilie und Anwendung des Käfigvogel-Siegels</li>
+      </ol>
+    </section>
+
+    <!-- 11 KAEFIGVOGEL -->
+    <section class="chapter" id="c11" data-title="Das Käfigvogel-Siegel">
+      <div class="chapter-head">
+        <div class="chapter-num">11</div>
+        <h2>Das Käfigvogel-Siegel</h2>
+      </div>
+      <p class="lead">Das Hyuga Soke no Juinjutsu, besser bekannt als Käfigvogel-Siegel, gehört zu den ältesten und bedeutendsten Siegeltechniken des Hyuga-Clans.</p>
+
+      <figure class="chapter-figure figure-portrait">
+        <img src="images/haupthaus-nebenhaus-kaiten.png" alt="Haupthaus und Nebenhaus - Hakkesho Kaiten">
+        <figcaption>Haupthaus 本家 &amp; Nebenhaus 分家 - Hakkeshō Kaiten 八卦掌回天</figcaption>
+      </figure>
+
+      <p>Ursprünglich diente das Siegel dazu, die Geheimnisse des Byakugan zu schützen und die Autorität der Hauptfamilie gegenüber der Zweigfamilie zu sichern. Innerhalb dieses Clan-Konzepts besitzt das Siegel zusätzlich eine disziplinarische Funktion.</p>
+      <p>Mitglieder, die wiederholt oder schwerwiegend gegen den Ehrenkodex verstossen, können durch Beschluss der Clanleitung der Zweigfamilie zugeordnet werden.</p>
+      <blockquote>Der Einsatz des Siegels erfolgt ausschliesslich nach sorgfältiger Prüfung und niemals aus persönlichen Motiven. Sein Zweck besteht darin, die Ordnung des Clans zu wahren und gleichzeitig langfristige Rollenspielmöglichkeiten sowie interne Konflikte glaubwürdig darzustellen.</blockquote>
+    </section>
+
+    <!-- 12 RANGSTRUKTUR -->
+    <section class="chapter" id="c12" data-title="Interne Rangstruktur">
+      <div class="chapter-head">
+        <div class="chapter-num">12</div>
+        <h2>Interne Rangstruktur</h2>
+      </div>
+      <p class="lead">Die Rangordnung des Hyuga-Clans im Überblick - von der Clanleitung bis zu den Schülern.</p>
+      <div class="hierarchy">
+        <div class="rank-row"><div class="rank-box"><div class="title">Clanleiter</div><div class="desc">Höchste Autorität</div></div></div>
+        <div class="rank-connector"><svg width="2" height="24"><line x1="1" y1="0" x2="1" y2="24" stroke="var(--line-strong)" stroke-width="1"/></svg></div>
+        <div class="rank-row"><div class="rank-box"><div class="title">Stellvertreter</div><div class="desc">Führung bei Abwesenheit</div></div></div>
+        <div class="rank-connector"><svg width="2" height="24"><line x1="1" y1="0" x2="1" y2="24" stroke="var(--line-strong)" stroke-width="1"/></svg></div>
+        <div class="rank-row"><div class="rank-box"><div class="title">Älteste</div><div class="desc">Beratend, ausbildend</div></div></div>
+        <div class="rank-connector"><svg width="2" height="24"><line x1="1" y1="0" x2="1" y2="24" stroke="var(--line-strong)" stroke-width="1"/></svg></div>
+        <div class="rank-row two">
+          <div class="rank-box"><div class="title">Vollwertige Mitglieder</div><div class="desc">Fundament des Clans</div></div>
+        </div>
+        <div class="rank-connector"><svg width="2" height="24"><line x1="1" y1="0" x2="1" y2="24" stroke="var(--line-strong)" stroke-width="1"/></svg></div>
+        <div class="rank-row"><div class="rank-box"><div class="title">Schüler</div><div class="desc">In Ausbildung</div></div></div>
+      </div>
+      <p>Jede Ebene bringt eigene Aufgaben mit sich, wie in Kapitel 08 beschrieben. Der Aufstieg zwischen den Ebenen erfolgt leistungs- und wertebasiert, siehe Kapitel 13.</p>
+    </section>
+
+    <!-- 13 AUFSTIEGSSYSTEM -->
+    <section class="chapter" id="c13" data-title="Das Aufstiegssystem">
+      <div class="chapter-head">
+        <div class="chapter-num">13</div>
+        <h2>Das Aufstiegssystem</h2>
+      </div>
+      <p class="lead">Jeder Aufstieg erfolgt leistungsorientiert und basiert sowohl auf praktischen Fertigkeiten als auch auf Verhalten, Engagement und Loyalität.</p>
+      <p>Ein höherer Rang stellt keine Belohnung dar, sondern bringt grössere Verantwortung gegenüber dem Clan und seinen Mitgliedern mit sich.</p>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/training-discipline.png" alt="Meditierende Silhouette ueber dem Dorf">
+        <figcaption>Training &amp; Discipline - 修練と規律</figcaption>
+      </figure>
+
+      <div class="vein-divider">
+        <div class="line"></div>
+        <span style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--violet-dim);text-transform:uppercase;">Der Weg zum vollwertigen Mitglied</span>
+        <div class="line"></div>
+      </div>
+      <p>Jedes neue Mitglied beginnt seine Laufbahn als Schüler. Während dieser Ausbildungszeit werden die Grundlagen des Clans vermittelt und die persönliche Entwicklung beobachtet. Die Ausbildung umfasst unter anderem:</p>
+      <ul class="plain">
+        <li>Geschichte des Hyuga-Clans</li>
+        <li>Ehrenkodex und Clanregeln</li>
+        <li>Grundlagen des Byakugan</li>
+        <li>Einführung in den Sanften Fauststil (Juken)</li>
+        <li>Chakra-Kontrolle</li>
+        <li>Verhalten innerhalb des Clans und Respekt gegenüber Ranghöheren</li>
+      </ul>
+      <p>Erst nach erfolgreichem Abschluss der Ausbildung kann ein Schüler zum vollwertigen Mitglied ernannt werden.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <h3>Theoretischer Teil</h3>
+          <ul>
+            <li>Kenntnisse des Ehrenkodex</li>
+            <li>Verständnis der Clanregeln</li>
+            <li>Wissen über Geschichte und Traditionen</li>
+            <li>Grundkenntnisse über das Byakugan</li>
+            <li>Verständnis der Hierarchie</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Praktischer Teil</h3>
+          <ul>
+            <li>Kontrolle des Chakras</li>
+            <li>Umgang mit dem Byakugan</li>
+            <li>Grundlagen des Juken</li>
+            <li>Sparring gegen ein erfahrenes Mitglied</li>
+            <li>Auftreten unter Druck und Disziplin während der Prüfung</li>
+          </ul>
+        </div>
+      </div>
+      <p>Nur wer beide Prüfungsteile erfolgreich besteht, wird als vollwertiges Mitglied aufgenommen.</p>
+
+      <div class="vein-divider">
+        <div class="line"></div>
+        <span style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--violet-dim);text-transform:uppercase;">Weitere Beförderungen</span>
+        <div class="line"></div>
+      </div>
+      <p>Der Aufstieg innerhalb des Clans erfolgt nicht ausschliesslich aufgrund von Stärke oder Kampferfahrung. Entscheidend sind insbesondere Aktivität innerhalb des Rollenspiels, Einhaltung des Ehrenkodex, Loyalität, Zuverlässigkeit, Verantwortungsbewusstsein, Unterstützung anderer Mitglieder, Teilnahme an Clanveranstaltungen und Vorbildfunktion. Beförderungen werden gemeinsam durch den Clanleiter und den Stellvertreter beschlossen.</p>
+      <p>Mit jeder Beförderung wachsen auch die Erwartungen: Mitglieder höherer Ränge sollen jüngere Mitglieder fördern, Konflikte schlichten, den Ehrenkodex vorleben, Verantwortung übernehmen und den Clan nach aussen würdig vertreten. Der Rang ist Ausdruck des Vertrauens, das der Clan einem Mitglied entgegenbringt.</p>
+    </section>
+
+    <!-- 14 STAERKEN/SCHWAECHEN -->
+    <section class="chapter" id="c14" data-title="Stärken und Schwächen">
+      <div class="chapter-head">
+        <div class="chapter-num">14</div>
+        <h2>Stärken und Schwächen</h2>
+      </div>
+      <p class="lead">Der Hyuga-Clan besitzt zahlreiche Eigenschaften, die ihn zu einem der stärksten Taijutsu-Clans der Shinobi-Welt machen - doch auch die Hyuga besitzen Grenzen.</p>
+      <div class="duo">
+        <div class="col strength">
+          <h3>Stärken</h3>
+          <h4>Herausragende Wahrnehmung</h4>
+          <p>Durch das Byakugan können selbst kleinste Bewegungen, Chakraflüsse und versteckte Gegner erkannt werden.</p>
+          <h4>Perfekte Chakra-Kontrolle</h4>
+          <p>Ermöglicht den Einsatz hochentwickelter Techniken und macht den Juken erst möglich.</p>
+          <h4>Meister des Nahkampfes</h4>
+          <p>Nur wenige Clans erreichen im direkten Nahkampf das Niveau der Hyuga.</p>
+          <h4>Defensive Stärke</h4>
+          <p>Techniken wie die Himmlische Rotation bieten ausgezeichnete Verteidigung.</p>
+          <h4>Disziplin und Teamfähigkeit</h4>
+          <p>Ruhiges, kontrolliertes Handeln unter Druck sowie eine starke Rolle als Späher und Unterstützer im Team.</p>
+        </div>
+        <div class="col weakness">
+          <h3>Schwächen</h3>
+          <h4>Begrenzter Fernkampf</h4>
+          <p>Der Schwerpunkt der Kampfkünste liegt eindeutig im Nahkampf.</p>
+          <h4>Hoher Trainingsaufwand</h4>
+          <p>Das vollständige Beherrschen des Byakugan und des Juken erfordert viele Jahre intensiven Trainings.</p>
+          <h4>Abhängigkeit vom Byakugan</h4>
+          <p>Ein erheblicher Teil der Kampftechniken setzt den Einsatz des Byakugan voraus.</p>
+          <h4>Grossflächige Angriffe</h4>
+          <p>Gegner mit grossflächigen oder schwer vorhersehbaren Angriffen können selbst erfahrene Hyuga vor Herausforderungen stellen.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 15 BEDEUTENDE MITGLIEDER -->
+    <section class="chapter" id="c15" data-title="Bedeutende Mitglieder">
+      <div class="chapter-head">
+        <div class="chapter-num">15</div>
+        <h2>Bedeutende Mitglieder</h2>
+      </div>
+      <p class="lead">Im Laufe der Geschichte brachte der Clan zahlreiche aussergewöhnliche Shinobi hervor.</p>
+
+      <figure class="chapter-figure figure-wide">
+        <img src="images/hyuuga-portrait.png" alt="Portrait eines Hyuuga Clanmitglieds">
+        <figcaption>日向一族</figcaption>
+      </figure>
+
+      <div class="member">
+        <div class="glyph">日</div>
+        <div><h3>Hiashi Hyuga</h3><p>War viele Jahre Oberhaupt des Hyuga-Clans und setzte sich für dessen Weiterentwicklung ein. Galt als einer der stärksten Anwender des Byakugan seiner Generation.</p></div>
+      </div>
+      <div class="member">
+        <div class="glyph">影</div>
+        <div><h3>Hizashi Hyuga</h3><p>Zwillingsbruder Hiashis. Sein Opfer zum Schutz des Clans zählt zu den bedeutendsten Ereignissen der Clan-Geschichte und beeinflusste spätere Reformen nachhaltig.</p></div>
+      </div>
+      <div class="member">
+        <div class="glyph">根</div>
+        <div><h3>Neji Hyuga</h3><p>Galt als Ausnahmetalent und meisterte bereits in jungen Jahren zahlreiche geheime Techniken des Clans. Trug massgeblich dazu bei, alte Traditionen zu hinterfragen und den Zusammenhalt zwischen Haupt- und Zweigfamilie zu stärken.</p></div>
+      </div>
+      <div class="member">
+        <div class="glyph">陽</div>
+        <div><h3>Hinata Hyuga</h3><p>Entwickelte sich von einer zurückhaltenden Kunoichi zu einer starken und entschlossenen Vertreterin des Clans. Ihr Mitgefühl und ihre Entschlossenheit machten sie zu einem Vorbild für viele jüngere Mitglieder.</p></div>
+      </div>
+      <div class="member">
+        <div class="glyph">花</div>
+        <div><h3>Hanabi Hyuga</h3><p>Zählt zu den talentiertesten Hyuga ihrer Generation. Durch ihre Fähigkeiten und ihr Pflichtbewusstsein gilt sie als würdige Vertreterin der Traditionen des Clans.</p></div>
+      </div>
+    </section>
+
+    <!-- 16 CLANWAPPEN -->
+    <section class="chapter" id="c16" data-title="Das Clanwappen">
+      <div class="chapter-head">
+        <div class="chapter-num">16</div>
+        <h2>Das Clanwappen</h2>
+      </div>
+      <div class="crest-wrap">
+        <img src="images/clan-wappen.png" alt="Hyuuga Clan Wappen" style="width:220px;max-width:70%;height:auto;border-radius:6px;border:1px solid var(--line);">
+        <p style="max-width:60ch;margin-top:26px;">Das Wappen des Hyuga-Clans steht für Reinheit, Klarheit und die aussergewöhnliche Wahrnehmung des Byakugan. Auf Kleidung, Bannern, Schriftrollen und offiziellen Dokumenten erinnert das Wappen jedes Mitglied daran, die Werte des Clans jederzeit zu vertreten.</p>
+        <div class="crest-values">
+          <span>Weisheit</span><span>Disziplin</span><span>Verantwortung</span><span>Zusammenhalt</span><span>Tradition</span><span>Ehre</span>
+        </div>
+        <figure class="chapter-figure figure-wide" style="width:100%;margin-top:36px;">
+          <img src="images/hyuuga-crest-bluten.png" alt="Hyuuga Wappen mit Kirschblueten">
+          <figcaption>Hyuuga Crest - 日向家の紋章</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 17 SCHLUSSWORT -->
+    <section class="closing" id="c17" data-title="Schlusswort">
+      <div class="kicker" style="text-align:center;">17 - Schlusswort</div>
+      <p style="max-width:68ch;margin:0 auto 18px;">Der Hyuga-Clan gehört seit Jahrhunderten zu den tragenden Säulen Konohagakures. Seine Geschichte ist geprägt von Disziplin, Tradition und dem stetigen Streben nach Perfektion. Das Byakugan und der Sanfte Fauststil machen seine Mitglieder zu aussergewöhnlichen Shinobi, doch ihre wahre Stärke liegt in ihrem Charakter, ihrer Loyalität und ihrem Verantwortungsbewusstsein.</p>
+      <p style="max-width:68ch;margin:0 auto;">Dieses Handbuch dient nicht nur als Nachschlagewerk, sondern als Leitfaden für jedes Mitglied des Clans. Es soll die Geschichte bewahren, die Werte vermitteln und zukünftige Generationen daran erinnern, was es bedeutet, ein Hyuga zu sein.</p>
+
+      <figure class="chapter-figure" style="max-width:340px;margin:36px auto 0;">
+        <img src="images/fate-of-the-clan.png" alt="Fate of the Clan - Wirbel um das Clan-Symbol">
+        <figcaption>Fate of the Clan - 一族の運命</figcaption>
+      </figure>
+
+      <p class="final-quote">"Ein Hyuga wird nicht durch seine Augen definiert,<br>sondern durch die Ehre, mit der er seinen Weg beschreitet."</p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const chapters = Array.from(document.querySelectorAll('main section[id]'));
+  const tocList = document.getElementById('tocList');
+  const mobileTocList = document.getElementById('mobileTocList');
+
+  chapters.forEach(sec => {
+    const id = sec.id;
+    const title = sec.dataset.title || (sec.querySelector('h2') ? sec.querySelector('h2').textContent : 'Start');
+    const numEl = sec.querySelector('.chapter-num');
+    const num = id === 'top' ? '' : (numEl ? numEl.textContent : (id === 'c17' ? '17' : ''));
+
+    const li = document.createElement('li');
+    li.innerHTML = `<a href="#${id}"><span class="num">${num}</span><span>${title}</span></a>`;
+    tocList.appendChild(li);
+
+    const mli = document.createElement('li');
+    mli.innerHTML = `<a href="#${id}"><span class="num">${num}</span><span>${title}</span></a>`;
+    mobileTocList.appendChild(mli);
+  });
+
+  const tocLinks = tocList.querySelectorAll('a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const link = tocList.querySelector(`a[href="#${id}"]`);
+      if (!link) return;
+      if (entry.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+
+  chapters.forEach(sec => observer.observe(sec));
+
+  const navToggle = document.getElementById('navToggle');
+  const mobileToc = document.getElementById('mobileToc');
+  navToggle.addEventListener('click', () => {
+    mobileToc.classList.toggle('open');
+  });
+  mobileTocList.addEventListener('click', (e) => {
+    if (e.target.closest('a')) mobileToc.classList.remove('open');
+  });
+</script>
+
+</body>
+</html>
